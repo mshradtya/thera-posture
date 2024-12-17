@@ -25,6 +25,22 @@ export default function RootLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="questionnaire/question1"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="questionnaire/question2"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="questionnaire/question3"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="questionnaire/question4"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }

@@ -53,7 +53,7 @@ const Page = () => {
           <Animated.View entering={FadeInDown.delay(1200).duration(500)}>
             <TouchableOpacity
               style={styles.btn}
-              // onPress={() => router.replace("/(tabs)")}
+              onPress={() => router.replace("/questionnaire/question1")}
             >
               <Text style={styles.btnText}>Get Started</Text>
             </TouchableOpacity>
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingBottom: 50,
     paddingHorizontal: 30,
-    gap: 10,
+    gap: 5,
     backgroundColor: "rgba(0,0,0,0.5)",
   },
   logoWrapper: {
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.white,
     fontSize: 24,
-    fontWeight: 600,
+    fontWeight: 400,
     letterSpacing: 1.5,
     lineHeight: 36,
     textAlign: "center",
