@@ -5,8 +5,9 @@ import {
   TouchableOpacity,
   View,
   Image,
+  TextInput,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import Animated, {
@@ -15,9 +16,18 @@ import Animated, {
   FadeInUp,
 } from "react-native-reanimated";
 import { StatusBar } from "expo-status-bar";
+import { useAuth } from "@/context/AuthContext";
 
 const Page = () => {
   const router = useRouter();
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    // Add your login logic here
+    router.replace("/questionnaire/question1"); // Replace with your home route
+  };
 
   return (
     <View style={styles.container}>
@@ -48,14 +58,44 @@ const Page = () => {
             style={styles.description}
             entering={FadeInRight.delay(700).duration(500)}
           >
-            Where Innovation Meets Comfort.
+            Welcome Back
           </Animated.Text>
+
+          <Animated.View
+            style={styles.inputContainer}
+            entering={FadeInDown.delay(900).duration(500)}
+          >
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              placeholderTextColor="rgba(255,255,255,0.7)"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor="rgba(255,255,255,0.7)"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+          </Animated.View>
+
           <Animated.View entering={FadeInDown.delay(1200).duration(500)}>
+            <TouchableOpacity style={styles.btn} onPress={handleLogin}>
+              <Text style={styles.btnText}>Login</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity
-              style={styles.btn}
-              onPress={() => router.replace("/questionnaire/question1")}
+              style={styles.signupBtn}
+              onPress={() => router.push("/auth/register")}
             >
-              <Text style={styles.btnText}>Get Started</Text>
+              <Text style={styles.signupText}>
+                Don't have an account? Sign Up
+              </Text>
             </TouchableOpacity>
           </Animated.View>
         </View>
@@ -88,7 +128,7 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.white,
     fontSize: 24,
-    fontWeight: 400,
+    fontWeight: "400",
     letterSpacing: 1.5,
     lineHeight: 36,
     textAlign: "center",
@@ -96,21 +136,43 @@ const styles = StyleSheet.create({
   description: {
     color: Colors.white,
     fontSize: 16,
-    fontWeight: 500,
+    fontWeight: "500",
     letterSpacing: 1.2,
     lineHeight: 22,
     textAlign: "center",
+    marginBottom: 20,
+  },
+  inputContainer: {
+    gap: 15,
+    width: "100%",
+    marginBottom: 20,
+  },
+  input: {
+    backgroundColor: "rgba(255,255,255,0.2)",
+    borderRadius: 10,
+    padding: 15,
+    color: Colors.white,
+    fontSize: 16,
   },
   btn: {
     backgroundColor: Colors.tint,
     paddingVertical: 15,
-    marginVertical: 20,
+    marginVertical: 10,
     alignItems: "center",
     borderRadius: 10,
   },
   btnText: {
     color: Colors.white,
     fontSize: 16,
-    fontWeight: 700,
+    fontWeight: "700",
+  },
+  signupBtn: {
+    alignItems: "center",
+    marginTop: 10,
+  },
+  signupText: {
+    color: Colors.white,
+    fontSize: 14,
+    fontWeight: "500",
   },
 });

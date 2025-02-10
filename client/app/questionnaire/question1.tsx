@@ -4,11 +4,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 
-const Question4 = () => {
+const Question1 = () => {
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState("");
 
-  const options = ["Support", "Comfort", "Durability", "Price"];
+  const options = ["Side", "Back", "Stomach", "Combination"];
 
   return (
     <View style={styles.container}>
@@ -24,14 +24,14 @@ const Question4 = () => {
 
       {/* Header Section */}
       <View style={styles.header}>
-        <Text style={styles.title}>MATTRESS FEATURES</Text>
+        <Text style={styles.title}>SLEEP POSITION</Text>
         <Text style={styles.fact}>
-          A good mattress should cater to your needs—be it comfort, support, or
-          durability.
+          Your sleeping position can significantly impact your sleep quality and
+          posture.
         </Text>
         <View style={styles.separator} />
         <Text style={styles.question}>
-          What feature is most important in a new mattress?
+          What is your preferred sleeping position?
         </Text>
       </View>
 
@@ -46,7 +46,7 @@ const Question4 = () => {
             ]}
             onPress={() => {
               setSelectedOption(option);
-              setTimeout(() => router.replace("/"), 300);
+              setTimeout(() => router.push("/questionnaire/question2"), 300);
             }}
             activeOpacity={0.8}
           >
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: Colors.tint,
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 25,
   },
   header: {
     paddingHorizontal: 20,
@@ -152,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Question4;
+export default Question1;
