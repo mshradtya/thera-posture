@@ -27,6 +27,7 @@ export default function RootLayout() {
     <AuthProvider>
       <Stack>
         <Stack.Screen name="auth" options={{ headerShown: false }} />
+        <Stack.Screen name="questions" options={{ headerShown: false }} />
         {/* <Stack.Screen
           name="questionnaire/question1"
           options={{ headerShown: false }}

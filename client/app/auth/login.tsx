@@ -26,7 +26,7 @@ const Page = () => {
 
   const handleLogin = () => {
     // Add your login logic here
-    router.replace("/questionnaire/question1"); // Replace with your home route
+    router.replace("/questions/question1"); // Replace with your home route
   };
 
   return (
