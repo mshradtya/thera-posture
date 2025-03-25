@@ -213,7 +213,7 @@ const BackPain = () => {
           onPress={() => {
             if (selectedOption && (selectedOption === "No" || painLevel > 0)) {
               // In a real app, you would save the responses here
-              router.push("/questions/complete");
+              router.push("/questions/assessment-complete");
             }
           }}
           disabled={
