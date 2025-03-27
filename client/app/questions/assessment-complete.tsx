@@ -6,7 +6,7 @@ import {
   StyleSheet,
   StatusBar,
   Image,
-  Dimensions,
+  SafeAreaView,
   ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,31 +14,27 @@ import { useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
 
-const { width } = Dimensions.get("window");
-
 const AssessmentComplete = () => {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
 
       {/* Top Bar */}
-      <LinearGradient
-        colors={["#4CAF50", "#2E7D32"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.topBar}
-      >
+      <View style={styles.header}>
         <View style={styles.topBarPlaceholder} />
-        <Text style={styles.topBarTitle}>Assessment Complete</Text>
+        <Text style={styles.headerTitle}>Assessment Complete</Text>
         <TouchableOpacity onPress={() => router.replace("/")}>
-          <Ionicons name="close" size={24} color="#FFF" />
+          <Ionicons name="close" size={24} color={Colors.text.primary} />
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
 
-      <ScrollView style={styles.scrollView}>
-        {/* Content Container with Shadow */}
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* Content Container */}
         <View style={styles.contentContainer}>
           {/* Success Illustration */}
           <View style={styles.illustrationContainer}>
@@ -76,7 +72,7 @@ const AssessmentComplete = () => {
                 <View
                   style={[
                     styles.resultIconContainer,
-                    { backgroundColor: "#5C6BC0" },
+                    { backgroundColor: Colors.secondary },
                   ]}
                 >
                   <Ionicons name="fitness-outline" size={24} color="#FFF" />
@@ -138,48 +134,44 @@ const AssessmentComplete = () => {
           <Text style={styles.secondaryButtonText}>Return to Home</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121520",
+    backgroundColor: Colors.background,
   },
   scrollView: {
     flex: 1,
   },
-  topBar: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 20,
-    paddingTop: 50, // Adjust for status bar
+    paddingVertical: 12,
+    backgroundColor: Colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
   },
   topBarPlaceholder: {
     width: 24, // Same as close icon width
   },
-  topBarTitle: {
-    color: "#FFF",
+  headerTitle: {
+    color: Colors.text.primary,
     fontSize: 16,
     fontWeight: "600",
   },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 25,
+    paddingBottom: 120, // Space for bottom buttons
+  },
   contentContainer: {
     flex: 1,
-    marginTop: -20,
-    backgroundColor: "#1e222b",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingHorizontal: 25,
     paddingTop: 30,
-    paddingBottom: 120, // Space for bottom buttons
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 10,
   },
   illustrationContainer: {
     alignItems: "center",
@@ -189,10 +181,10 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: "#4CAF50",
+    backgroundColor: Colors.primary,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#4CAF50",
+    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 15,
@@ -204,13 +196,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#e1e1e1",
+    color: Colors.text.primary,
     textAlign: "center",
     marginBottom: 15,
   },
   message: {
     fontSize: 16,
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
     lineHeight: 24,
     textAlign: "center",
     marginBottom: 30,
@@ -221,12 +213,12 @@ const styles = StyleSheet.create({
   resultTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#e1e1e1",
+    color: Colors.text.primary,
     marginBottom: 20,
   },
   resultCard: {
     flexDirection: "row",
-    backgroundColor: "#282d3a",
+    backgroundColor: Colors.surface,
     borderRadius: 15,
     padding: 15,
     marginBottom: 15,
@@ -240,7 +232,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 23,
-    backgroundColor: "#4a6cf7",
+    backgroundColor: Colors.primary,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 15,
@@ -251,16 +243,16 @@ const styles = StyleSheet.create({
   resultCardTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#e1e1e1",
+    color: Colors.text.primary,
     marginBottom: 5,
   },
   resultCardText: {
     fontSize: 14,
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
     lineHeight: 20,
   },
   nextStepsContainer: {
-    backgroundColor: "rgba(74, 108, 247, 0.1)",
+    backgroundColor: Colors.surface,
     borderRadius: 15,
     padding: 20,
     marginTop: 5,
@@ -268,12 +260,12 @@ const styles = StyleSheet.create({
   nextStepsTitle: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#e1e1e1",
+    color: Colors.text.primary,
     marginBottom: 10,
   },
   nextStepsText: {
     fontSize: 14,
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
     lineHeight: 20,
   },
   buttonContainer: {
@@ -281,21 +273,21 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#1e222b",
+    backgroundColor: Colors.background,
     paddingHorizontal: 25,
     paddingVertical: 20,
     borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.05)",
+    borderTopColor: Colors.border,
   },
   primaryButton: {
     flexDirection: "row",
-    backgroundColor: "#4CAF50",
+    backgroundColor: Colors.primary,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 12,
-    shadowColor: "#4CAF50",
+    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
@@ -314,10 +306,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.2)",
+    borderColor: Colors.border,
   },
   secondaryButtonText: {
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
     fontSize: 16,
   },
 });

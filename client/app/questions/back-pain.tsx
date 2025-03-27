@@ -6,14 +6,13 @@ import {
   StyleSheet,
   StatusBar,
   Image,
-  Dimensions,
+  SafeAreaView,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
-
-const { width } = Dimensions.get("window");
 
 const BackPain = () => {
   const router = useRouter();
@@ -27,22 +26,44 @@ const BackPain = () => {
     setSelectedOption("Yes");
   };
 
+  // Helper function to get color based on pain level
+  const getPainLevelColor = (level) => {
+    if (level <= 3) return "rgba(102, 187, 106, 0.8)"; // Green for mild
+    if (level <= 7) return "rgba(255, 167, 38, 0.8)"; // Orange for moderate
+    return "rgba(239, 83, 80, 0.8)"; // Red for severe
+  };
+
+  // Helper function to get description based on pain level
+  const getPainDescription = (level) => {
+    if (level <= 3) {
+      return {
+        title: "Mild Pain",
+        text: "Noticeable but does not significantly interfere with daily activities.",
+      };
+    } else if (level <= 7) {
+      return {
+        title: "Moderate Pain",
+        text: "Interferes with some daily activities and may require occasional medication.",
+      };
+    } else {
+      return {
+        title: "Severe Pain",
+        text: "Significantly interferes with daily activities and may require regular medication.",
+      };
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
 
       {/* Top Bar */}
-      <LinearGradient
-        colors={["#4a6cf7", "#33409e"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.topBar}
-      >
+      <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={24} color="#FFF" />
+          <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
         </TouchableOpacity>
 
         <View style={styles.progressContainer}>
@@ -53,155 +74,181 @@ const BackPain = () => {
         </View>
 
         <TouchableOpacity onPress={() => router.replace("/")}>
-          <Ionicons name="close" size={24} color="#FFF" />
+          <Ionicons name="close" size={24} color={Colors.text.primary} />
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
 
-      {/* Content Container with Shadow */}
-      <View style={styles.contentContainer}>
-        {/* Header Image */}
-        <View style={styles.imageContainer}>
-          <Image
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/2966/2966334.png",
-            }}
-            style={styles.headerImage}
-            resizeMode="contain"
-          />
-        </View>
-
-        {/* Header Section */}
-        <View style={styles.header}>
-          <Text style={styles.title}>BACK ASSESSMENT</Text>
-          <Text style={styles.fact}>
-            Back pain affects 80% of people at some point in their lives, and
-            understanding your pain is crucial for proper care.
-          </Text>
-          <View style={styles.separator} />
-          <Text style={styles.question}>Do you experience back pain?</Text>
-        </View>
-
-        {/* Options */}
-        <View style={styles.optionsContainer}>
-          {options.map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.option,
-                selectedOption === option &&
-                  (option === "Yes"
-                    ? styles.optionSelectedYes
-                    : styles.optionSelectedNo),
-              ]}
-              onPress={() => {
-                setSelectedOption(option);
-                if (option === "No") {
-                  setPainLevel(0);
-                }
-              }}
-              activeOpacity={0.8}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
+        {/* Content Container */}
+        <View style={styles.contentContainer}>
+          {/* Header Image */}
+          <View style={styles.imageContainer}>
+            <LinearGradient
+              colors={[Colors.primary, Colors.secondary]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.logoCircle}
             >
-              <View
-                style={[
-                  styles.radioCircle,
-                  selectedOption === option &&
-                    (option === "Yes"
-                      ? styles.radioCircleSelectedYes
-                      : styles.radioCircleSelectedNo),
-                ]}
-              >
-                {selectedOption === option && (
+              <Image
+                source={{
+                  uri: "https://cdn-icons-png.flaticon.com/512/2966/2966334.png",
+                }}
+                style={styles.headerImage}
+                resizeMode="contain"
+              />
+            </LinearGradient>
+          </View>
+
+          {/* Header Section */}
+          <View style={styles.headerTextSection}>
+            <Text style={styles.title}>Back Assessment</Text>
+            <Text style={styles.subtitle}>
+              Back pain affects 80% of people at some point in their lives.
+              Understanding your pain is crucial for providing the most
+              appropriate care and recommendations.
+            </Text>
+          </View>
+
+          {/* Question Card */}
+          <View style={styles.questionCard}>
+            <Text style={styles.question}>Do you experience back pain?</Text>
+
+            {/* Options */}
+            <View style={styles.optionsContainer}>
+              {options.map((option, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.option,
+                    selectedOption === option &&
+                      (option === "Yes"
+                        ? styles.optionSelectedYes
+                        : styles.optionSelectedNo),
+                  ]}
+                  onPress={() => {
+                    setSelectedOption(option);
+                    if (option === "No") {
+                      setPainLevel(0);
+                    }
+                  }}
+                  activeOpacity={0.8}
+                >
                   <View
                     style={[
-                      styles.radioDot,
-                      option === "Yes" ? styles.radioDotYes : styles.radioDotNo,
+                      styles.radioCircle,
+                      selectedOption === option &&
+                        (option === "Yes"
+                          ? styles.radioCircleSelectedYes
+                          : styles.radioCircleSelectedNo),
                     ]}
-                  />
-                )}
-              </View>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedOption === option && styles.optionTextSelected,
-                ]}
-              >
-                {option}
-              </Text>
-
-              {/* Icon indicator */}
-              {option === "Yes" ? (
-                <Ionicons
-                  name="medical"
-                  size={20}
-                  color={selectedOption === option ? "#FFF" : "#a1a1a1"}
-                  style={styles.optionIcon}
-                />
-              ) : (
-                <Ionicons
-                  name="checkmark-circle"
-                  size={20}
-                  color={selectedOption === option ? "#FFF" : "#a1a1a1"}
-                  style={styles.optionIcon}
-                />
-              )}
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* Pain Scale - Only show if Yes is selected */}
-        {selectedOption === "Yes" && (
-          <View style={styles.painScaleSection}>
-            <Text style={styles.painScaleTitle}>
-              How would you rate your pain?
-            </Text>
-
-            <View style={styles.painScaleContainer}>
-              <View style={styles.painLevelRow}>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
-                  <TouchableOpacity
-                    key={level}
-                    style={[
-                      styles.painLevel,
-                      painLevel === level && styles.painLevelSelected,
-                      { backgroundColor: getPainLevelColor(level) },
-                    ]}
-                    onPress={() => handlePainLevelSelect(level)}
                   >
-                    <Text
-                      style={[
-                        styles.painLevelText,
-                        painLevel === level && styles.painLevelTextSelected,
-                      ]}
-                    >
-                      {level}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
+                    {selectedOption === option && (
+                      <View
+                        style={[
+                          styles.radioDot,
+                          option === "Yes"
+                            ? styles.radioDotYes
+                            : styles.radioDotNo,
+                        ]}
+                      />
+                    )}
+                  </View>
+                  <Text
+                    style={[
+                      styles.optionText,
+                      selectedOption === option && styles.optionTextSelected,
+                    ]}
+                  >
+                    {option}
+                  </Text>
 
-              <View style={styles.painLegend}>
-                <Text style={styles.painLegendText}>Mild</Text>
-                <Text style={styles.painLegendText}>Moderate</Text>
-                <Text style={styles.painLegendText}>Severe</Text>
-              </View>
+                  {/* Icon indicator */}
+                  {option === "Yes" ? (
+                    <Ionicons
+                      name="medical"
+                      size={20}
+                      color={
+                        selectedOption === option
+                          ? "#FFF"
+                          : Colors.text.tertiary
+                      }
+                      style={styles.optionIcon}
+                    />
+                  ) : (
+                    <Ionicons
+                      name="checkmark-circle"
+                      size={20}
+                      color={
+                        selectedOption === option
+                          ? "#FFF"
+                          : Colors.text.tertiary
+                      }
+                      style={styles.optionIcon}
+                    />
+                  )}
+                </TouchableOpacity>
+              ))}
             </View>
 
-            {/* Description of selected pain level */}
-            {painLevel > 0 && (
-              <View style={styles.painDescription}>
-                <Text style={styles.painDescriptionTitle}>
-                  {getPainDescription(painLevel).title}
+            {/* Pain Scale - Only show if Yes is selected */}
+            {selectedOption === "Yes" && (
+              <View style={styles.painScaleSection}>
+                <Text style={styles.painScaleTitle}>
+                  How would you rate your pain?
                 </Text>
-                <Text style={styles.painDescriptionText}>
-                  {getPainDescription(painLevel).text}
-                </Text>
+
+                <View style={styles.painScaleContainer}>
+                  <View style={styles.painLevelRow}>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
+                      <TouchableOpacity
+                        key={level}
+                        style={[
+                          styles.painLevel,
+                          painLevel === level && styles.painLevelSelected,
+                          { backgroundColor: getPainLevelColor(level) },
+                        ]}
+                        onPress={() => handlePainLevelSelect(level)}
+                      >
+                        <Text
+                          style={[
+                            styles.painLevelText,
+                            painLevel === level && styles.painLevelTextSelected,
+                          ]}
+                        >
+                          {level}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+
+                  <View style={styles.painLegend}>
+                    <Text style={styles.painLegendText}>Mild</Text>
+                    <Text style={styles.painLegendText}>Moderate</Text>
+                    <Text style={styles.painLegendText}>Severe</Text>
+                  </View>
+                </View>
+
+                {/* Description of selected pain level */}
+                {painLevel > 0 && (
+                  <View style={styles.painDescription}>
+                    <Text style={styles.painDescriptionTitle}>
+                      {getPainDescription(painLevel).title}
+                    </Text>
+                    <Text style={styles.painDescriptionText}>
+                      {getPainDescription(painLevel).text}
+                    </Text>
+                  </View>
+                )}
               </View>
             )}
           </View>
-        )}
-      </View>
+        </View>
+      </ScrollView>
 
-      {/* Continue Button - Fixed at bottom */}
+      {/* Continue Button */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[
@@ -224,49 +271,24 @@ const BackPain = () => {
           <Ionicons name="checkmark-circle" size={20} color="#FFF" />
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
-};
-
-// Helper function to get color based on pain level
-const getPainLevelColor = (level) => {
-  if (level <= 3) return "rgba(102, 187, 106, 0.8)"; // Green for mild
-  if (level <= 7) return "rgba(255, 167, 38, 0.8)"; // Orange for moderate
-  return "rgba(239, 83, 80, 0.8)"; // Red for severe
-};
-
-// Helper function to get description based on pain level
-const getPainDescription = (level) => {
-  if (level <= 3) {
-    return {
-      title: "Mild Pain",
-      text: "Noticeable but does not significantly interfere with daily activities.",
-    };
-  } else if (level <= 7) {
-    return {
-      title: "Moderate Pain",
-      text: "Interferes with some daily activities and may require occasional medication.",
-    };
-  } else {
-    return {
-      title: "Severe Pain",
-      text: "Significantly interferes with daily activities and may require regular medication.",
-    };
-  }
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121520",
+    backgroundColor: Colors.background,
   },
-  topBar: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 20,
-    paddingTop: 50, // Adjust for status bar
+    paddingVertical: 12,
+    backgroundColor: Colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
   },
   backButton: {
     padding: 5,
@@ -277,76 +299,89 @@ const styles = StyleSheet.create({
   progressBar: {
     width: 100,
     height: 6,
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    backgroundColor: Colors.inputBg,
     borderRadius: 3,
     overflow: "hidden",
   },
   progressIndicator: {
     height: "100%",
-    backgroundColor: "#FFF",
+    backgroundColor: Colors.primary,
     borderRadius: 3,
   },
   progressText: {
-    color: "#FFF",
+    color: Colors.text.secondary,
     fontSize: 12,
     marginTop: 5,
+    fontWeight: "500",
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
   },
   contentContainer: {
     flex: 1,
-    marginTop: -20,
-    backgroundColor: "#1e222b",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingHorizontal: 20,
-    paddingTop: 30,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 10,
+    paddingTop: 20,
+    paddingBottom: 100, // Space for bottom button
   },
   imageContainer: {
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 30,
+  },
+  logoCircle: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
   headerImage: {
-    width: 100,
-    height: 100,
-    tintColor: "#4a6cf7",
+    width: 60,
+    height: 60,
+    tintColor: "#FFFFFF",
   },
-  header: {
-    marginBottom: 20,
+  headerTextSection: {
+    marginBottom: 30,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#e1e1e1",
+    fontSize: 28,
+    fontWeight: "700",
+    color: Colors.text.primary,
+    textAlign: "center",
+    marginBottom: 12,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: Colors.text.secondary,
+    lineHeight: 24,
     textAlign: "center",
   },
-  fact: {
-    fontSize: 14,
-    color: "#a1a1a1",
-    marginTop: 10,
-    lineHeight: 20,
-    textAlign: "center",
-  },
-  separator: {
-    height: 3,
-    backgroundColor: "#4a6cf7",
-    marginVertical: 15,
-    width: 60,
-    alignSelf: "center",
-    borderRadius: 2,
+  questionCard: {
+    backgroundColor: Colors.card,
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: Colors.text.primary,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   question: {
     fontSize: 20,
-    fontWeight: "500",
-    color: "#e1e1e1",
-    marginTop: 10,
+    fontWeight: "600",
+    color: Colors.text.primary,
+    marginBottom: 20,
     textAlign: "center",
   },
   optionsContainer: {
-    marginTop: 30,
+    marginTop: 10,
+    marginBottom: 20,
   },
   option: {
     flexDirection: "row",
@@ -355,7 +390,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 15,
     marginBottom: 15,
-    backgroundColor: "#2a2f3b",
+    backgroundColor: Colors.inputBg,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -363,19 +398,17 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   optionSelectedYes: {
-    backgroundColor: "#4a6cf7",
-    borderColor: "#4a6cf7",
+    backgroundColor: Colors.primary,
   },
   optionSelectedNo: {
     backgroundColor: "#38b2ac",
-    borderColor: "#38b2ac",
   },
   radioCircle: {
     width: 24,
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: "#999",
+    borderColor: Colors.text.tertiary,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 15,
@@ -399,7 +432,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 18,
-    color: "#e1e1e1",
+    color: Colors.text.primary,
     flex: 1,
   },
   optionTextSelected: {
@@ -409,17 +442,16 @@ const styles = StyleSheet.create({
   optionIcon: {
     marginLeft: 10,
   },
-
   painScaleSection: {
     marginTop: 15,
-    backgroundColor: "rgba(74, 108, 247, 0.05)",
+    backgroundColor: Colors.surface,
     padding: 15,
     borderRadius: 15,
   },
   painScaleTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#e1e1e1",
+    color: Colors.text.primary,
     marginBottom: 15,
   },
   painScaleContainer: {
@@ -462,51 +494,56 @@ const styles = StyleSheet.create({
   },
   painLegendText: {
     fontSize: 12,
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
   },
   painDescription: {
     marginTop: 15,
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: Colors.surface,
     padding: 12,
     borderRadius: 8,
   },
   painDescriptionTitle: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#e1e1e1",
+    color: Colors.text.primary,
     marginBottom: 5,
   },
   painDescriptionText: {
     fontSize: 13,
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
     lineHeight: 18,
   },
-
   buttonContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
     paddingHorizontal: 20,
     paddingBottom: 30,
-    paddingTop: 10,
-    backgroundColor: "#1e222b",
+    paddingTop: 15,
+    backgroundColor: Colors.background,
+    borderTopWidth: 1,
+    borderTopColor: Colors.border,
   },
   continueButton: {
     flexDirection: "row",
-    backgroundColor: "#4a6cf7",
+    backgroundColor: Colors.primary,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#4a6cf7",
+    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 5,
   },
   continueButtonDisabled: {
-    backgroundColor: "#444",
+    backgroundColor: Colors.text.tertiary,
     shadowOpacity: 0,
   },
   continueButtonText: {
-    color: "#FFF",
+    color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "600",
     marginRight: 10,

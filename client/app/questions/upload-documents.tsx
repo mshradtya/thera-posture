@@ -8,6 +8,7 @@ import {
   Image,
   Dimensions,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -39,21 +40,16 @@ const UploadDocuments = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
 
       {/* Top Bar */}
-      <LinearGradient
-        colors={["#4a6cf7", "#33409e"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.topBar}
-      >
+      <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={24} color="#FFF" />
+          <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
         </TouchableOpacity>
 
         <View style={styles.progressContainer}>
@@ -64,108 +60,113 @@ const UploadDocuments = () => {
         </View>
 
         <TouchableOpacity onPress={() => router.replace("/")}>
-          <Ionicons name="close" size={24} color="#FFF" />
+          <Ionicons name="close" size={24} color={Colors.text.primary} />
         </TouchableOpacity>
-      </LinearGradient>
-
-      {/* Content Container with Shadow */}
-      <View style={styles.contentContainer}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {/* Header Section */}
-          <View style={styles.header}>
-            <Text style={styles.title}>UPLOAD DOCUMENTS</Text>
-            <Text style={styles.fact}>
-              Please upload your medical reports, MRIs, X-rays, or any other
-              relevant documents to help us personalize your recommendations.
-            </Text>
-            <View style={styles.separator} />
-          </View>
-
-          {/* Upload Area */}
-          <View style={styles.uploadArea}>
-            <TouchableOpacity
-              style={styles.uploadButton}
-              onPress={handleUpload}
-            >
-              <View style={styles.uploadIconContainer}>
-                <Ionicons name="cloud-upload-outline" size={32} color="#FFF" />
-              </View>
-              <Text style={styles.uploadText}>Upload Medical Reports</Text>
-              <Text style={styles.uploadSubtext}>
-                PDF, JPEG, or PNG (Max 10MB)
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* File format info */}
-          <View style={styles.formatInfoContainer}>
-            <View style={styles.formatItem}>
-              <Ionicons name="document-outline" size={16} color="#4a6cf7" />
-              <Text style={styles.formatText}>PDF</Text>
-            </View>
-            <View style={styles.formatItem}>
-              <Ionicons name="image-outline" size={16} color="#4a6cf7" />
-              <Text style={styles.formatText}>JPEG</Text>
-            </View>
-            <View style={styles.formatItem}>
-              <Ionicons name="image-outline" size={16} color="#4a6cf7" />
-              <Text style={styles.formatText}>PNG</Text>
-            </View>
-          </View>
-
-          {/* Uploaded Documents List */}
-          {uploadedDocs.length > 0 && (
-            <View style={styles.documentsContainer}>
-              <View style={styles.documentsTitleRow}>
-                <Text style={styles.documentsTitle}>Uploaded Documents</Text>
-                <Text style={styles.documentsCount}>
-                  {uploadedDocs.length} file
-                  {uploadedDocs.length !== 1 ? "s" : ""}
-                </Text>
-              </View>
-
-              {uploadedDocs.map((doc) => (
-                <View key={doc.id} style={styles.documentItem}>
-                  <View style={styles.documentIconContainer}>
-                    <Ionicons name="document-text" size={20} color="#FFF" />
-                  </View>
-                  <View style={styles.documentInfo}>
-                    <Text style={styles.documentName}>{doc.name}</Text>
-                    <View style={styles.documentMetaInfo}>
-                      <Text style={styles.documentSize}>{doc.size}</Text>
-                      <Text style={styles.documentDate}>{doc.date}</Text>
-                    </View>
-                  </View>
-                  <TouchableOpacity
-                    style={styles.documentRemoveBtn}
-                    onPress={() => handleRemoveDoc(doc.id)}
-                  >
-                    <Ionicons name="trash-outline" size={20} color="#e57373" />
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </View>
-          )}
-
-          {/* Privacy note */}
-          <View style={styles.privacyNote}>
-            <Ionicons
-              name="shield-checkmark-outline"
-              size={16}
-              color="#a1a1a1"
-            />
-            <Text style={styles.privacyText}>
-              Your documents are securely encrypted and only used to provide
-              personalized recommendations.
-            </Text>
-          </View>
-
-          {/* Spacer for scroll */}
-          <View style={{ height: 80 }} />
-        </ScrollView>
       </View>
 
-      {/* Continue Button - Fixed at bottom */}
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header Section */}
+        <View style={styles.headerTextSection}>
+          <Text style={styles.title}>Upload Documents</Text>
+          <Text style={styles.subtitle}>
+            Please upload your medical reports, MRIs, X-rays, or any other
+            relevant documents to help us personalize your recommendations.
+          </Text>
+        </View>
+
+        {/* Upload Area */}
+        <TouchableOpacity style={styles.uploadArea} onPress={handleUpload}>
+          <View style={styles.uploadIconContainer}>
+            <Ionicons
+              name="cloud-upload-outline"
+              size={32}
+              color={Colors.primary}
+            />
+          </View>
+          <Text style={styles.uploadText}>Upload Medical Reports</Text>
+          <Text style={styles.uploadSubtext}>PDF, JPEG, or PNG (Max 10MB)</Text>
+        </TouchableOpacity>
+
+        {/* File format info */}
+        <View style={styles.formatInfoContainer}>
+          <View style={styles.formatItem}>
+            <Ionicons
+              name="document-outline"
+              size={16}
+              color={Colors.primary}
+            />
+            <Text style={styles.formatText}>PDF</Text>
+          </View>
+          <View style={styles.formatItem}>
+            <Ionicons name="image-outline" size={16} color={Colors.primary} />
+            <Text style={styles.formatText}>JPEG</Text>
+          </View>
+          <View style={styles.formatItem}>
+            <Ionicons name="image-outline" size={16} color={Colors.primary} />
+            <Text style={styles.formatText}>PNG</Text>
+          </View>
+        </View>
+
+        {/* Uploaded Documents List */}
+        {uploadedDocs.length > 0 && (
+          <View style={styles.documentsContainer}>
+            <View style={styles.documentsTitleRow}>
+              <Text style={styles.documentsTitle}>Uploaded Documents</Text>
+              <Text style={styles.documentsCount}>
+                {uploadedDocs.length} file
+                {uploadedDocs.length !== 1 ? "s" : ""}
+              </Text>
+            </View>
+
+            {uploadedDocs.map((doc) => (
+              <View key={doc.id} style={styles.documentItem}>
+                <View style={styles.documentIconContainer}>
+                  <Ionicons name="document-text" size={20} color="#FFF" />
+                </View>
+                <View style={styles.documentInfo}>
+                  <Text style={styles.documentName}>{doc.name}</Text>
+                  <View style={styles.documentMetaInfo}>
+                    <Text style={styles.documentSize}>{doc.size}</Text>
+                    <Text style={styles.documentDate}>{doc.date}</Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  style={styles.documentRemoveBtn}
+                  onPress={() => handleRemoveDoc(doc.id)}
+                >
+                  <Ionicons
+                    name="trash-outline"
+                    size={20}
+                    color={Colors.error}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* Privacy note */}
+        <View style={styles.privacyNote}>
+          <Ionicons
+            name="shield-checkmark-outline"
+            size={16}
+            color={Colors.text.secondary}
+          />
+          <Text style={styles.privacyText}>
+            Your documents are securely encrypted and only used to provide
+            personalized recommendations.
+          </Text>
+        </View>
+
+        {/* Spacer */}
+        <View style={{ height: 100 }} />
+      </ScrollView>
+
+      {/* Continue Button */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[
@@ -179,22 +180,24 @@ const UploadDocuments = () => {
           <Ionicons name="arrow-forward" size={20} color="#FFF" />
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121520",
+    backgroundColor: Colors.background,
   },
-  topBar: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 20,
-    paddingTop: 50, // Adjust for status bar
+    paddingVertical: 12,
+    backgroundColor: Colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
   },
   backButton: {
     padding: 5,
@@ -205,95 +208,75 @@ const styles = StyleSheet.create({
   progressBar: {
     width: 100,
     height: 6,
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    backgroundColor: Colors.inputBg,
     borderRadius: 3,
     overflow: "hidden",
   },
   progressIndicator: {
     height: "100%",
-    backgroundColor: "#FFF",
+    backgroundColor: Colors.primary,
     borderRadius: 3,
   },
   progressText: {
-    color: "#FFF",
+    color: Colors.text.secondary,
     fontSize: 12,
     marginTop: 5,
+    fontWeight: "500",
   },
-  contentContainer: {
+  scrollView: {
     flex: 1,
-    marginTop: -20,
-    backgroundColor: "#1e222b",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingHorizontal: 20,
-    paddingTop: 30,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 10,
   },
-  header: {
-    marginBottom: 20,
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 100,
+  },
+  headerTextSection: {
+    marginBottom: 30,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#e1e1e1",
+    fontSize: 28,
+    fontWeight: "700",
+    color: Colors.text.primary,
     textAlign: "center",
+    marginBottom: 12,
   },
-  fact: {
-    fontSize: 14,
-    color: "#a1a1a1",
-    marginTop: 10,
-    lineHeight: 20,
+  subtitle: {
+    fontSize: 16,
+    color: Colors.text.secondary,
+    lineHeight: 24,
     textAlign: "center",
-  },
-  separator: {
-    height: 3,
-    backgroundColor: "#4a6cf7",
-    marginVertical: 15,
-    width: 60,
-    alignSelf: "center",
-    borderRadius: 2,
   },
   uploadArea: {
-    marginVertical: 20,
     borderWidth: 2,
     borderStyle: "dashed",
-    borderColor: "rgba(74, 108, 247, 0.3)",
+    borderColor: Colors.primary,
     borderRadius: 15,
     padding: 25,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(74, 108, 247, 0.05)",
-  },
-  uploadButton: {
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: Colors.surface,
+    marginBottom: 20,
   },
   uploadIconContainer: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: "#4a6cf7",
+    backgroundColor: Colors.surface,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 15,
-    shadowColor: "#4a6cf7",
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
+    borderWidth: 2,
+    borderColor: Colors.primary,
   },
   uploadText: {
     fontSize: 16,
-    color: "#e1e1e1",
+    color: Colors.text.primary,
     fontWeight: "bold",
   },
   uploadSubtext: {
     fontSize: 12,
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
     marginTop: 5,
   },
   formatInfoContainer: {
@@ -304,14 +287,14 @@ const styles = StyleSheet.create({
   formatItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#282d3a",
+    backgroundColor: Colors.surface,
     paddingVertical: 6,
     paddingHorizontal: 10,
     borderRadius: 20,
     marginHorizontal: 5,
   },
   formatText: {
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
     fontSize: 12,
     marginLeft: 5,
   },
@@ -327,12 +310,12 @@ const styles = StyleSheet.create({
   documentsTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#e1e1e1",
+    color: Colors.text.primary,
   },
   documentsCount: {
     fontSize: 12,
-    color: "#a1a1a1",
-    backgroundColor: "#282d3a",
+    color: Colors.text.secondary,
+    backgroundColor: Colors.inputBg,
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 12,
@@ -340,7 +323,7 @@ const styles = StyleSheet.create({
   documentItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#2a2f3b",
+    backgroundColor: Colors.surface,
     borderRadius: 12,
     padding: 15,
     marginBottom: 10,
@@ -354,7 +337,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 8,
-    backgroundColor: "#4a6cf7",
+    backgroundColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
@@ -364,7 +347,7 @@ const styles = StyleSheet.create({
   },
   documentName: {
     fontSize: 14,
-    color: "#e1e1e1",
+    color: Colors.text.primary,
     fontWeight: "500",
   },
   documentMetaInfo: {
@@ -373,12 +356,12 @@ const styles = StyleSheet.create({
   },
   documentSize: {
     fontSize: 12,
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
     marginRight: 12,
   },
   documentDate: {
     fontSize: 12,
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
   },
   documentRemoveBtn: {
     padding: 8,
@@ -386,14 +369,14 @@ const styles = StyleSheet.create({
   privacyNote: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(74, 108, 247, 0.05)",
+    backgroundColor: Colors.surface,
     borderRadius: 10,
     padding: 12,
     marginTop: 5,
   },
   privacyText: {
     fontSize: 12,
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
     marginLeft: 8,
     flex: 1,
   },
@@ -405,29 +388,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 30,
     paddingTop: 15,
-    backgroundColor: "#1e222b",
+    backgroundColor: Colors.background,
     borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.05)",
+    borderTopColor: Colors.border,
   },
   continueButton: {
     flexDirection: "row",
-    backgroundColor: "#4a6cf7",
+    backgroundColor: Colors.primary,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#4a6cf7",
+    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 5,
   },
   continueButtonDisabled: {
-    backgroundColor: "#444",
+    backgroundColor: Colors.text.tertiary,
     shadowOpacity: 0,
   },
   continueButtonText: {
-    color: "#FFF",
+    color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "600",
     marginRight: 10,

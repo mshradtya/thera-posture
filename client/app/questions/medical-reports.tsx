@@ -6,14 +6,13 @@ import {
   StyleSheet,
   StatusBar,
   Image,
-  Dimensions,
+  SafeAreaView,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
-
-const { width } = Dimensions.get("window");
 
 const MedicalReports = () => {
   const router = useRouter();
@@ -22,21 +21,16 @@ const MedicalReports = () => {
   const options = ["Yes", "No"];
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
 
       {/* Top Bar */}
-      <LinearGradient
-        colors={["#4a6cf7", "#33409e"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.topBar}
-      >
+      <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={24} color="#FFF" />
+          <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
         </TouchableOpacity>
 
         <View style={styles.progressContainer}>
@@ -47,176 +41,197 @@ const MedicalReports = () => {
         </View>
 
         <TouchableOpacity onPress={() => router.replace("/")}>
-          <Ionicons name="close" size={24} color="#FFF" />
+          <Ionicons name="close" size={24} color={Colors.text.primary} />
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
 
-      {/* Content Container with Shadow */}
-      <View style={styles.contentContainer}>
-        {/* Header Image */}
-        <View style={styles.imageContainer}>
-          <Image
-            source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/3209/3209060.png",
-            }}
-            style={styles.headerImage}
-            resizeMode="contain"
-          />
-        </View>
-
-        {/* Header Section */}
-        <View style={styles.header}>
-          <Text style={styles.title}>MEDICAL DOCUMENTATION</Text>
-          <Text style={styles.fact}>
-            Medical reports help us understand your condition better and provide
-            more personalized recommendations for your spine health.
-          </Text>
-          <View style={styles.separator} />
-          <Text style={styles.question}>Can you provide medical reports?</Text>
-        </View>
-
-        {/* Options */}
-        <View style={styles.optionsContainer}>
-          {options.map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.option,
-                selectedOption === option &&
-                  (option === "Yes"
-                    ? styles.optionSelectedYes
-                    : styles.optionSelectedNo),
-              ]}
-              onPress={() => {
-                setSelectedOption(option);
-                // Route based on answer - added slight delay for animation
-                setTimeout(() => {
-                  if (option === "Yes") {
-                    router.push("/questions/upload-documents");
-                  } else {
-                    router.push("/questions/proceed-without-docs");
-                  }
-                }, 400);
-              }}
-              activeOpacity={0.8}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
+        {/* Content Container */}
+        <View style={styles.contentContainer}>
+          {/* Header Image */}
+          <View style={styles.imageContainer}>
+            <LinearGradient
+              colors={[Colors.primary, Colors.secondary]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.logoCircle}
             >
-              <View
-                style={[
-                  styles.radioCircle,
-                  selectedOption === option &&
-                    (option === "Yes"
-                      ? styles.radioCircleSelectedYes
-                      : styles.radioCircleSelectedNo),
-                ]}
-              >
-                {selectedOption === option && (
+              <Image
+                source={require("@/assets/images/document.png")}
+                style={styles.headerImage}
+                resizeMode="contain"
+              />
+            </LinearGradient>
+          </View>
+
+          {/* Header Section */}
+          <View style={styles.headerTextSection}>
+            <Text style={styles.title}>Medical Documentation</Text>
+            <Text style={styles.subtitle}>
+              Medical reports help us understand your condition better and
+              provide more personalized recommendations for your spine health.
+            </Text>
+          </View>
+
+          {/* Question Card */}
+          <View style={styles.questionCard}>
+            <Text style={styles.question}>
+              Can you provide medical reports?
+            </Text>
+
+            {/* Options */}
+            <View style={styles.optionsContainer}>
+              {options.map((option, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.option,
+                    selectedOption === option &&
+                      (option === "Yes"
+                        ? styles.optionSelectedYes
+                        : styles.optionSelectedNo),
+                  ]}
+                  onPress={() => {
+                    setSelectedOption(option);
+                    // Route based on answer - added slight delay for animation
+                    setTimeout(() => {
+                      if (option === "Yes") {
+                        router.push("/questions/upload-documents");
+                      } else {
+                        router.push("/questions/proceed-without-docs");
+                      }
+                    }, 400);
+                  }}
+                  activeOpacity={0.8}
+                >
                   <View
                     style={[
-                      styles.radioDot,
-                      option === "Yes" ? styles.radioDotYes : styles.radioDotNo,
+                      styles.radioCircle,
+                      selectedOption === option &&
+                        (option === "Yes"
+                          ? styles.radioCircleSelectedYes
+                          : styles.radioCircleSelectedNo),
                     ]}
-                  />
-                )}
-              </View>
-              <Text
-                style={[
-                  styles.optionText,
-                  selectedOption === option && styles.optionTextSelected,
-                ]}
-              >
-                {option}
-              </Text>
+                  >
+                    {selectedOption === option && (
+                      <View
+                        style={[
+                          styles.radioDot,
+                          option === "Yes"
+                            ? styles.radioDotYes
+                            : styles.radioDotNo,
+                        ]}
+                      />
+                    )}
+                  </View>
+                  <Text
+                    style={[
+                      styles.optionText,
+                      selectedOption === option && styles.optionTextSelected,
+                    ]}
+                  >
+                    {option}
+                  </Text>
 
-              {/* Icon indicator */}
-              {option === "Yes" ? (
-                <Ionicons
-                  name="folder-open-outline"
-                  size={20}
-                  color={selectedOption === option ? "#FFF" : "#a1a1a1"}
-                  style={styles.optionIcon}
-                />
-              ) : (
-                <Ionicons
-                  name="close-circle-outline"
-                  size={20}
-                  color={selectedOption === option ? "#FFF" : "#a1a1a1"}
-                  style={styles.optionIcon}
-                />
-              )}
-            </TouchableOpacity>
-          ))}
-        </View>
+                  {/* Icon indicator */}
+                  {option === "Yes" ? (
+                    <Ionicons
+                      name="folder-open-outline"
+                      size={20}
+                      color={
+                        selectedOption === option
+                          ? "#FFF"
+                          : Colors.text.tertiary
+                      }
+                      style={styles.optionIcon}
+                    />
+                  ) : (
+                    <Ionicons
+                      name="close-circle-outline"
+                      size={20}
+                      color={
+                        selectedOption === option
+                          ? "#FFF"
+                          : Colors.text.tertiary
+                      }
+                      style={styles.optionIcon}
+                    />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </View>
 
-        {/* Document types */}
-        <View style={styles.infoContainer}>
-          <Ionicons
-            name="document-text-outline"
-            size={24}
-            color="#a1a1a1"
-            style={styles.infoIcon}
-          />
-          <View style={styles.infoTextContainer}>
-            <Text style={styles.infoTitle}>Acceptable document types:</Text>
-            <View style={styles.documentTypesContainer}>
-              <View style={styles.documentType}>
-                <Ionicons name="document-outline" size={16} color="#4a6cf7" />
-                <Text style={styles.documentTypeText}>MRI reports</Text>
-              </View>
-              <View style={styles.documentType}>
-                <Ionicons name="document-outline" size={16} color="#4a6cf7" />
-                <Text style={styles.documentTypeText}>X-rays</Text>
-              </View>
-              <View style={styles.documentType}>
-                <Ionicons name="document-outline" size={16} color="#4a6cf7" />
-                <Text style={styles.documentTypeText}>Doctor's notes</Text>
-              </View>
-              <View style={styles.documentType}>
-                <Ionicons name="document-outline" size={16} color="#4a6cf7" />
-                <Text style={styles.documentTypeText}>Treatment records</Text>
+            {/* Document types */}
+            <View style={styles.infoContainer}>
+              <Ionicons
+                name="document-text-outline"
+                size={24}
+                color={Colors.primary}
+              />
+              <View style={styles.infoTextContainer}>
+                <Text style={styles.infoTitle}>Acceptable document types:</Text>
+                <View style={styles.documentTypesContainer}>
+                  <View style={styles.documentType}>
+                    <Ionicons
+                      name="document-outline"
+                      size={16}
+                      color={Colors.primary}
+                    />
+                    <Text style={styles.documentTypeText}>MRI reports</Text>
+                  </View>
+                  <View style={styles.documentType}>
+                    <Ionicons
+                      name="document-outline"
+                      size={16}
+                      color={Colors.primary}
+                    />
+                    <Text style={styles.documentTypeText}>X-rays</Text>
+                  </View>
+                  <View style={styles.documentType}>
+                    <Ionicons
+                      name="document-outline"
+                      size={16}
+                      color={Colors.primary}
+                    />
+                    <Text style={styles.documentTypeText}>Doctor's notes</Text>
+                  </View>
+                  <View style={styles.documentType}>
+                    <Ionicons
+                      name="document-outline"
+                      size={16}
+                      color={Colors.primary}
+                    />
+                    <Text style={styles.documentTypeText}>
+                      Treatment records
+                    </Text>
+                  </View>
+                </View>
               </View>
             </View>
           </View>
         </View>
-      </View>
-
-      {/* Continue Button - Fixed at bottom */}
-      {/* <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[
-            styles.continueButton,
-            !selectedOption && styles.continueButtonDisabled
-          ]}
-          onPress={() => {
-            if (selectedOption) {
-              if (selectedOption === "Yes") {
-                router.push("/questionnaire/upload-documents");
-              } else {
-                router.push("/questionnaire/proceed-without-docs");
-              }
-            }
-          }}
-          disabled={!selectedOption}
-        >
-          <Text style={styles.continueButtonText}>Continue</Text>
-          <Ionicons name="arrow-forward" size={20} color="#FFF" />
-        </TouchableOpacity>
-      </View> */}
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121520",
+    backgroundColor: Colors.background,
   },
-  topBar: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 20,
-    paddingTop: 50, // Adjust for status bar
+    paddingVertical: 12,
+    backgroundColor: Colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
   },
   backButton: {
     padding: 5,
@@ -227,76 +242,89 @@ const styles = StyleSheet.create({
   progressBar: {
     width: 100,
     height: 6,
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    backgroundColor: Colors.inputBg,
     borderRadius: 3,
     overflow: "hidden",
   },
   progressIndicator: {
     height: "100%",
-    backgroundColor: "#FFF",
+    backgroundColor: Colors.primary,
     borderRadius: 3,
   },
   progressText: {
-    color: "#FFF",
+    color: Colors.text.secondary,
     fontSize: 12,
     marginTop: 5,
+    fontWeight: "500",
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
   },
   contentContainer: {
     flex: 1,
-    marginTop: -20,
-    backgroundColor: "#1e222b",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingHorizontal: 20,
-    paddingTop: 30,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 10,
+    paddingTop: 20,
+    paddingBottom: 100, // Space for bottom button
   },
   imageContainer: {
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 30,
+  },
+  logoCircle: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
   headerImage: {
-    width: 100,
-    height: 100,
-    tintColor: "#4a6cf7",
+    width: 60,
+    height: 60,
+    tintColor: "#FFFFFF",
   },
-  header: {
-    marginBottom: 20,
+  headerTextSection: {
+    marginBottom: 30,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#e1e1e1",
+    fontSize: 28,
+    fontWeight: "700",
+    color: Colors.text.primary,
+    textAlign: "center",
+    marginBottom: 12,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: Colors.text.secondary,
+    lineHeight: 24,
     textAlign: "center",
   },
-  fact: {
-    fontSize: 14,
-    color: "#a1a1a1",
-    marginTop: 10,
-    lineHeight: 20,
-    textAlign: "center",
-  },
-  separator: {
-    height: 3,
-    backgroundColor: "#4a6cf7",
-    marginVertical: 15,
-    width: 60,
-    alignSelf: "center",
-    borderRadius: 2,
+  questionCard: {
+    backgroundColor: Colors.card,
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: Colors.text.primary,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   question: {
     fontSize: 20,
-    fontWeight: "500",
-    color: "#e1e1e1",
-    marginTop: 10,
+    fontWeight: "600",
+    color: Colors.text.primary,
+    marginBottom: 20,
     textAlign: "center",
   },
   optionsContainer: {
-    marginTop: 30,
+    marginTop: 10,
+    marginBottom: 20,
   },
   option: {
     flexDirection: "row",
@@ -305,7 +333,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 15,
     marginBottom: 15,
-    backgroundColor: "#2a2f3b",
+    backgroundColor: Colors.inputBg,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -313,19 +341,17 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   optionSelectedYes: {
-    backgroundColor: "#4a6cf7",
-    borderColor: "#4a6cf7",
+    backgroundColor: Colors.primary,
   },
   optionSelectedNo: {
     backgroundColor: "#38b2ac",
-    borderColor: "#38b2ac",
   },
   radioCircle: {
     width: 24,
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: "#999",
+    borderColor: Colors.text.tertiary,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 15,
@@ -349,7 +375,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 18,
-    color: "#e1e1e1",
+    color: Colors.text.primary,
     flex: 1,
   },
   optionTextSelected: {
@@ -361,21 +387,15 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flexDirection: "row",
-    backgroundColor: "rgba(74, 108, 247, 0.1)",
+    backgroundColor: "#EEF1FF",
     borderRadius: 12,
     padding: 15,
-    marginTop: 10,
-  },
-  infoIcon: {
-    marginRight: 10,
-    alignSelf: "flex-start",
-    marginTop: 2,
   },
   infoTextContainer: {
     flex: 1,
   },
   infoTitle: {
-    color: "#e1e1e1",
+    color: Colors.text.primary,
     fontSize: 14,
     fontWeight: "500",
     marginBottom: 10,
@@ -387,7 +407,7 @@ const styles = StyleSheet.create({
   documentType: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#282d3a",
+    backgroundColor: Colors.surface,
     paddingVertical: 6,
     paddingHorizontal: 10,
     borderRadius: 20,
@@ -395,38 +415,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   documentTypeText: {
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
     fontSize: 12,
     marginLeft: 5,
-  },
-  buttonContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 30,
-    paddingTop: 10,
-    backgroundColor: "#1e222b",
-  },
-  continueButton: {
-    flexDirection: "row",
-    backgroundColor: "#4a6cf7",
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#4a6cf7",
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  continueButtonDisabled: {
-    backgroundColor: "#444",
-    shadowOpacity: 0,
-  },
-  continueButtonText: {
-    color: "#FFF",
-    fontSize: 18,
-    fontWeight: "600",
-    marginRight: 10,
   },
 });
 
