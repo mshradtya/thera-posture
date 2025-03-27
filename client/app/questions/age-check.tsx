@@ -10,11 +10,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { Colors } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
+import { Colors } from "@/constants/Colors";
 
 const AgeCheck = () => {
   const router = useRouter();
@@ -43,24 +44,16 @@ const AgeCheck = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
 
-      {/* Top Bar */}
-      <LinearGradient
-        colors={["#4a6cf7", "#33409e"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.topBar}
-      >
+      {/* Header */}
+      <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={24} color="#FFF" />
+          <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
         </TouchableOpacity>
 
         <View style={styles.progressContainer}>
@@ -71,72 +64,84 @@ const AgeCheck = () => {
         </View>
 
         <TouchableOpacity onPress={() => router.replace("/")}>
-          <Ionicons name="close" size={24} color="#FFF" />
+          <Ionicons name="close" size={24} color={Colors.text.primary} />
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
 
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={styles.keyboardAvoid}
       >
-        {/* Content Container with Shadow */}
-        <View style={styles.contentContainer}>
-          {/* Header Image */}
-          <View style={styles.imageContainer}>
-            <Image
-              source={{
-                uri: "https://cdn-icons-png.flaticon.com/512/3209/3209202.png",
-              }}
-              style={styles.headerImage}
-              resizeMode="contain"
-            />
-          </View>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+        >
+          {/* Content Container */}
+          <View style={styles.contentContainer}>
+            {/* Logo and Header Image */}
+            <View style={styles.logoContainer}>
+              <LinearGradient
+                colors={[Colors.primary, Colors.secondary]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.logoCircle}
+              >
+                <Image
+                  source={require("@/assets/images/age-group-2.png")}
+                  style={styles.headerImage}
+                  resizeMode="contain"
+                />
+              </LinearGradient>
+            </View>
 
-          {/* Header Section */}
-          <View style={styles.header}>
-            <Text style={styles.title}>AGE VERIFICATION</Text>
-            <Text style={styles.fact}>
-              We need your age to ensure our recommendations are appropriate for
-              you. Different age groups have different spine development and
-              postural needs.
-            </Text>
-            <View style={styles.separator} />
-            <Text style={styles.question}>How old are you?</Text>
-          </View>
+            {/* Header Section */}
+            <View style={styles.headerTextSection}>
+              <Text style={styles.title}>Age Verification</Text>
+              <Text style={styles.subtitle}>
+                We need your age to ensure our recommendations are appropriate
+                for you. Different age groups have different spine development
+                and postural needs.
+              </Text>
+            </View>
 
-          {/* Age Input */}
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your age"
-              placeholderTextColor="#999"
-              keyboardType="number-pad"
-              value={age}
-              onChangeText={(text) => {
-                setAge(text);
-                setError("");
-              }}
-              maxLength={3}
-            />
-            {error ? <Text style={styles.errorText}>{error}</Text> : null}
-          </View>
+            {/* Question Card */}
+            <View style={styles.questionCard}>
+              <Text style={styles.question}>How old are you?</Text>
 
-          {/* Information note */}
-          <View style={styles.infoContainer}>
-            <Ionicons
-              name="information-circle"
-              size={24}
-              color="#a1a1a1"
-              style={styles.infoIcon}
-            />
-            <Text style={styles.infoText}>
-              Our product is designed for individuals 12 years and older. If you
-              are younger than 12, please consult with a healthcare provider
-              before using our services.
-            </Text>
+              {/* Age Input */}
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your age"
+                  placeholderTextColor={Colors.text.tertiary}
+                  keyboardType="number-pad"
+                  value={age}
+                  onChangeText={(text) => {
+                    setAge(text);
+                    setError("");
+                  }}
+                  maxLength={3}
+                />
+                {error ? <Text style={styles.errorText}>{error}</Text> : null}
+              </View>
+
+              {/* Information note */}
+              <View style={styles.infoContainer}>
+                <Ionicons
+                  name="information-circle"
+                  size={20}
+                  color={Colors.primary}
+                />
+                <Text style={styles.infoText}>
+                  Our product is designed for individuals 12 years and older. If
+                  you are younger than 12, please consult with a healthcare
+                  provider before using our services.
+                </Text>
+              </View>
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       {/* Continue Button - Fixed at bottom */}
       <View style={styles.buttonContainer}>
@@ -152,25 +157,27 @@ const AgeCheck = () => {
           <Ionicons name="arrow-forward" size={20} color="#FFF" />
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#121520",
+    backgroundColor: Colors.background,
   },
-  scrollContent: {
-    flexGrow: 1,
+  keyboardAvoid: {
+    flex: 1,
   },
-  topBar: {
+  header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 20,
-    paddingTop: 50, // Adjust for status bar
+    paddingVertical: 12,
+    backgroundColor: Colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
   },
   backButton: {
     padding: 5,
@@ -181,110 +188,119 @@ const styles = StyleSheet.create({
   progressBar: {
     width: 100,
     height: 6,
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    backgroundColor: Colors.inputBg,
     borderRadius: 3,
     overflow: "hidden",
   },
   progressIndicator: {
     height: "100%",
-    backgroundColor: "#FFF",
+    backgroundColor: Colors.primary,
     borderRadius: 3,
   },
   progressText: {
-    color: "#FFF",
+    color: Colors.text.secondary,
     fontSize: 12,
     marginTop: 5,
+    fontWeight: "500",
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
   },
   contentContainer: {
     flex: 1,
-    marginTop: -20,
-    backgroundColor: "#1e222b",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingHorizontal: 20,
-    paddingTop: 30,
+    paddingTop: 20,
     paddingBottom: 100, // Space for bottom button
-    minHeight: "100%",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 10,
   },
-  imageContainer: {
+  logoContainer: {
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 30,
+  },
+  logoCircle: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
   headerImage: {
-    width: 100,
-    height: 100,
-    tintColor: "#4a6cf7",
+    width: 60,
+    height: 60,
+    tintColor: "#FFFFFF",
   },
-  header: {
+  headerTextSection: {
     marginBottom: 30,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#e1e1e1",
+    fontSize: 28,
+    fontWeight: "700",
+    color: Colors.text.primary,
+    textAlign: "center",
+    marginBottom: 12,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: Colors.text.secondary,
+    lineHeight: 24,
     textAlign: "center",
   },
-  fact: {
-    fontSize: 14,
-    color: "#a1a1a1",
-    marginTop: 10,
-    lineHeight: 20,
-    textAlign: "center",
-  },
-  separator: {
-    height: 3,
-    backgroundColor: "#4a6cf7",
-    marginVertical: 15,
-    width: 60,
-    alignSelf: "center",
-    borderRadius: 2,
+  questionCard: {
+    backgroundColor: Colors.card,
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: Colors.text.primary,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   question: {
     fontSize: 20,
-    fontWeight: "500",
-    color: "#e1e1e1",
-    marginTop: 10,
-    textAlign: "center",
+    fontWeight: "600",
+    color: Colors.text.primary,
+    marginBottom: 20,
   },
   inputContainer: {
-    marginBottom: 25,
+    marginBottom: 20,
   },
   input: {
-    backgroundColor: "#2a2f3b",
+    backgroundColor: Colors.inputBg,
     borderRadius: 12,
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 16,
     fontSize: 18,
-    color: "#e1e1e1",
-    textAlign: "center",
+    color: Colors.text.primary,
+    fontWeight: "500",
   },
   errorText: {
-    color: "#e57373",
+    color: Colors.error,
     fontSize: 14,
     marginTop: 8,
-    textAlign: "center",
+    fontWeight: "500",
   },
   infoContainer: {
     flexDirection: "row",
-    backgroundColor: "rgba(74, 108, 247, 0.1)",
+    backgroundColor: "#EEF1FF",
     borderRadius: 12,
     padding: 15,
-    marginTop: 10,
   },
   infoIcon: {
     marginRight: 10,
     alignSelf: "flex-start",
   },
   infoText: {
-    color: "#a1a1a1",
+    color: Colors.text.secondary,
     fontSize: 14,
     flex: 1,
     lineHeight: 20,
+    marginLeft: 10,
   },
   buttonContainer: {
     position: "absolute",
@@ -294,25 +310,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 30,
     paddingTop: 15,
-    backgroundColor: "#1e222b",
+    backgroundColor: Colors.background,
     borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.05)",
+    borderTopColor: Colors.border,
   },
   continueButton: {
     flexDirection: "row",
-    backgroundColor: "#4a6cf7",
+    backgroundColor: Colors.primary,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#4a6cf7",
+    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 5,
   },
   continueButtonDisabled: {
-    backgroundColor: "#444",
+    backgroundColor: Colors.text.tertiary,
     shadowOpacity: 0,
   },
   continueButtonText: {

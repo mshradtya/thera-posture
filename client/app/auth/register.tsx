@@ -31,7 +31,7 @@ const Register = () => {
       // Add your password validation logic
       return;
     }
-    router.replace("/questionnaire/question1"); // Replace with your desired route
+    router.replace("/questions/age-check"); // Updated route
   };
 
   return (
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   title: {
-    color: Colors.white,
+    color: "#FFFFFF",
     fontSize: 24,
     fontWeight: "400",
     letterSpacing: 1.5,
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   description: {
-    color: Colors.white,
+    color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "500",
     letterSpacing: 1.2,
@@ -178,18 +178,18 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.2)",
     borderRadius: 10,
     padding: 15,
-    color: Colors.white,
+    color: "#FFFFFF",
     fontSize: 16,
   },
   btn: {
-    backgroundColor: Colors.tint,
+    backgroundColor: Colors.primary,
     paddingVertical: 15,
     marginVertical: 10,
     alignItems: "center",
     borderRadius: 10,
   },
   btnText: {
-    color: Colors.white,
+    color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "700",
   },
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   loginText: {
-    color: Colors.white,
+    color: "#FFFFFF",
     fontSize: 14,
     fontWeight: "500",
   },
