@@ -13,22 +13,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
+import PrimaryHeader from "@/components/Header";
 
 const ExitWeight = () => {
   const router = useRouter();
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
-
-      {/* Top Bar */}
-      <View style={styles.header}>
-        <View style={styles.topBarPlaceholder} />
-        <Text style={styles.headerTitle}>Weight Requirement</Text>
-        <TouchableOpacity onPress={() => router.replace("/")}>
-          <Ionicons name="close" size={24} color={Colors.text.primary} />
-        </TouchableOpacity>
-      </View>
+      <PrimaryHeader
+        title="Weight Requirement"
+        showBack={false}
+        showProgress={false}
+      />
 
       <ScrollView style={styles.scrollView}>
         {/* Content Container */}

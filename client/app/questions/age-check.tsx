@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  StatusBar,
   Image,
   TextInput,
   KeyboardAvoidingView,
@@ -16,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "@/constants/Colors";
+import PrimaryHeader from "@/components/Header";
 
 const AgeCheck = () => {
   const router = useRouter();
@@ -45,29 +45,12 @@ const AgeCheck = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
-
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
-        </TouchableOpacity>
-
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressIndicator, { width: "10%" }]} />
-          </View>
-          <Text style={styles.progressText}>1/5</Text>
-        </View>
-
-        <TouchableOpacity onPress={() => router.replace("/")}>
-          <Ionicons name="close" size={24} color={Colors.text.primary} />
-        </TouchableOpacity>
-      </View>
-
+      <PrimaryHeader
+        title="Age Verification"
+        showProgress={true}
+        progressValue={10}
+        progressText="1/5"
+      />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.keyboardAvoid}
@@ -168,40 +151,6 @@ const styles = StyleSheet.create({
   },
   keyboardAvoid: {
     flex: 1,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    backgroundColor: Colors.background,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
-  backButton: {
-    padding: 5,
-  },
-  progressContainer: {
-    alignItems: "center",
-  },
-  progressBar: {
-    width: 100,
-    height: 6,
-    backgroundColor: Colors.inputBg,
-    borderRadius: 3,
-    overflow: "hidden",
-  },
-  progressIndicator: {
-    height: "100%",
-    backgroundColor: Colors.primary,
-    borderRadius: 3,
-  },
-  progressText: {
-    color: Colors.text.secondary,
-    fontSize: 12,
-    marginTop: 5,
-    fontWeight: "500",
   },
   scrollContent: {
     flexGrow: 1,

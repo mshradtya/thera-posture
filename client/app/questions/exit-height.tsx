@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  StatusBar,
   Image,
   SafeAreaView,
   ScrollView,
@@ -13,22 +12,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
+import PrimaryHeader from "@/components/Header";
 
 const ExitHeight = () => {
   const router = useRouter();
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
-
-      {/* Top Bar */}
-      <View style={styles.header}>
-        <View style={styles.topBarPlaceholder} />
-        <Text style={styles.headerTitle}>Height Requirement</Text>
-        <TouchableOpacity onPress={() => router.replace("/")}>
-          <Ionicons name="close" size={24} color={Colors.text.primary} />
-        </TouchableOpacity>
-      </View>
+      <PrimaryHeader
+        title="Height Requirement"
+        showBack={false}
+        showProgress={false}
+      />
 
       <ScrollView style={styles.scrollView}>
         {/* Content Container */}
@@ -136,24 +131,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    backgroundColor: Colors.background,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
-  topBarPlaceholder: {
-    width: 24, // Same as close icon width
-  },
-  headerTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.text.primary,
   },
   scrollView: {
     flex: 1,

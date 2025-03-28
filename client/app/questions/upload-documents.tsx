@@ -4,8 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  StatusBar,
-  Image,
   Dimensions,
   ScrollView,
   SafeAreaView,
@@ -13,7 +11,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
-import { LinearGradient } from "expo-linear-gradient";
+import PrimaryHeader from "@/components/Header";
 
 const { width } = Dimensions.get("window");
 
@@ -41,28 +39,12 @@ const UploadDocuments = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
-
-      {/* Top Bar */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
-        </TouchableOpacity>
-
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressIndicator, { width: "70%" }]} />
-          </View>
-          <Text style={styles.progressText}>4/5</Text>
-        </View>
-
-        <TouchableOpacity onPress={() => router.replace("/")}>
-          <Ionicons name="close" size={24} color={Colors.text.primary} />
-        </TouchableOpacity>
-      </View>
+      <PrimaryHeader
+        title="Upload Documents"
+        showProgress={true}
+        progressValue={80}
+        progressText="4/5"
+      />
 
       <ScrollView
         style={styles.scrollView}
@@ -188,40 +170,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    backgroundColor: Colors.background,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
-  backButton: {
-    padding: 5,
-  },
-  progressContainer: {
-    alignItems: "center",
-  },
-  progressBar: {
-    width: 100,
-    height: 6,
-    backgroundColor: Colors.inputBg,
-    borderRadius: 3,
-    overflow: "hidden",
-  },
-  progressIndicator: {
-    height: "100%",
-    backgroundColor: Colors.primary,
-    borderRadius: 3,
-  },
-  progressText: {
-    color: Colors.text.secondary,
-    fontSize: 12,
-    marginTop: 5,
-    fontWeight: "500",
   },
   scrollView: {
     flex: 1,

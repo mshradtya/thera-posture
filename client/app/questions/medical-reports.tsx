@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  StatusBar,
   Image,
   SafeAreaView,
   ScrollView,
@@ -13,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
+import PrimaryHeader from "@/components/Header";
 
 const MedicalReports = () => {
   const router = useRouter();
@@ -22,28 +22,12 @@ const MedicalReports = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
-
-      {/* Top Bar */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
-        </TouchableOpacity>
-
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressIndicator, { width: "60%" }]} />
-          </View>
-          <Text style={styles.progressText}>3/5</Text>
-        </View>
-
-        <TouchableOpacity onPress={() => router.replace("/")}>
-          <Ionicons name="close" size={24} color={Colors.text.primary} />
-        </TouchableOpacity>
-      </View>
+      <PrimaryHeader
+        title="Medical Documentation"
+        showProgress={true}
+        progressValue={60}
+        progressText="3/5"
+      />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
