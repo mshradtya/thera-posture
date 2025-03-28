@@ -7,6 +7,7 @@ import {
   Dimensions,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -18,23 +19,34 @@ const { width } = Dimensions.get("window");
 const UploadDocuments = () => {
   const router = useRouter();
   const [uploadedDocs, setUploadedDocs] = useState([]);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const handleUpload = () => {
     // Mock function for document upload
     // In a real app, this would trigger document picker
-    setUploadedDocs([
-      ...uploadedDocs,
-      {
-        id: uploadedDocs.length + 1,
-        name: `Medical Report ${uploadedDocs.length + 1}.pdf`,
-        size: "2.4 MB",
-        date: new Date().toLocaleDateString(),
-      },
-    ]);
+    const newDoc = {
+      id: uploadedDocs.length + 1,
+      name: `Medical Report ${uploadedDocs.length + 1}.pdf`,
+      size: "2.4 MB",
+      date: new Date().toLocaleDateString(),
+    };
+
+    setUploadedDocs([...uploadedDocs, newDoc]);
+    setUploadSuccess(true);
+
+    // Show success message
+    Alert.alert(
+      "Upload Successful",
+      "Your document has been uploaded successfully. A professional practitioner will review your documents and get back shortly.",
+      [{ text: "OK" }]
+    );
   };
 
   const handleRemoveDoc = (id) => {
     setUploadedDocs(uploadedDocs.filter((doc) => doc.id !== id));
+    if (uploadedDocs.length === 1) {
+      setUploadSuccess(false);
+    }
   };
 
   return (
@@ -56,7 +68,17 @@ const UploadDocuments = () => {
           <Text style={styles.title}>Upload Documents</Text>
           <Text style={styles.subtitle}>
             Please upload your medical reports, MRIs, X-rays, or any other
-            relevant documents to help us personalize your recommendations.
+            relevant documents to help us personalize your recommendations while
+            avoiding injury.
+          </Text>
+        </View>
+
+        {/* Professional review notice */}
+        <View style={styles.reviewNoteContainer}>
+          <Ionicons name="medical" size={20} color={Colors.primary} />
+          <Text style={styles.reviewNoteText}>
+            A professional practitioner will review your documents and get back
+            shortly
           </Text>
         </View>
 
@@ -131,6 +153,20 @@ const UploadDocuments = () => {
           </View>
         )}
 
+        {/* Success message after upload - removed duplicate practitioner review message */}
+        {uploadSuccess && (
+          <View style={styles.successNoteContainer}>
+            <Ionicons
+              name="checkmark-circle"
+              size={20}
+              color={Colors.success}
+            />
+            <Text style={styles.successNoteText}>
+              Upload successful! Your documents have been received.
+            </Text>
+          </View>
+        )}
+
         {/* Privacy note */}
         <View style={styles.privacyNote}>
           <Ionicons
@@ -180,7 +216,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   headerTextSection: {
-    marginBottom: 30,
+    marginBottom: 20,
   },
   title: {
     fontSize: 28,
@@ -194,6 +230,23 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
     lineHeight: 24,
     textAlign: "center",
+  },
+  reviewNoteContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#E8F0FF",
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 20,
+    borderLeftWidth: 3,
+    borderLeftColor: Colors.primary,
+  },
+  reviewNoteText: {
+    color: Colors.text.secondary,
+    fontSize: 14,
+    marginLeft: 10,
+    flex: 1,
+    lineHeight: 20,
   },
   uploadArea: {
     borderWidth: 2,
@@ -313,6 +366,23 @@ const styles = StyleSheet.create({
   },
   documentRemoveBtn: {
     padding: 8,
+  },
+  successNoteContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(76, 175, 80, 0.1)",
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 20,
+    borderLeftWidth: 3,
+    borderLeftColor: Colors.success,
+  },
+  successNoteText: {
+    color: Colors.text.secondary,
+    fontSize: 14,
+    marginLeft: 10,
+    flex: 1,
+    lineHeight: 20,
   },
   privacyNote: {
     flexDirection: "row",

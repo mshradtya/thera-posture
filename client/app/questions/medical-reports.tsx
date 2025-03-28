@@ -55,8 +55,7 @@ const MedicalReports = () => {
           <View style={styles.headerTextSection}>
             <Text style={styles.title}>Medical Documentation</Text>
             <Text style={styles.subtitle}>
-              Medical reports help us understand your condition better and
-              provide more personalized recommendations for your spine health.
+              This helps us provide personalized recommendations.
             </Text>
           </View>
 

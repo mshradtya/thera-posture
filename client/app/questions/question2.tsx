@@ -54,9 +54,7 @@ const Question2 = () => {
           <View style={styles.headerTextSection}>
             <Text style={styles.title}>Clinical Diagnosis</Text>
             <Text style={styles.subtitle}>
-              A clinical diagnosis helps us understand the specific nature of
-              your spine condition and provide targeted recommendations for your
-              posture.
+              A clinical diagnosis will help us make appropriate recommendations
             </Text>
           </View>
 
@@ -160,7 +158,9 @@ const Question2 = () => {
                   Examples of clinical diagnoses:
                 </Text>
                 <Text style={styles.infoText}>• Herniated disc</Text>
-                <Text style={styles.infoText}>• Spinal stenosis</Text>
+                <Text style={styles.infoText}>
+                  • Hunchback condition (Slouching)
+                </Text>
                 <Text style={styles.infoText}>• Degenerative disc disease</Text>
                 <Text style={styles.infoText}>• Scoliosis</Text>
               </View>

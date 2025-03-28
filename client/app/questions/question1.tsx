@@ -19,7 +19,7 @@ const Question1 = () => {
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState("");
 
-  const options = ["Yes", "No"];
+  const options = ["Yes", "No, I only want to maintain good posture"];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,8 +55,7 @@ const Question1 = () => {
           <View style={styles.headerTextSection}>
             <Text style={styles.title}>Spine Assessment</Text>
             <Text style={styles.subtitle}>
-              Understanding your spine health history helps us provide the most
-              appropriate recommendations for your posture needs.
+              Spine assessment helps us make appropriate recommendations.
             </Text>
           </View>
 

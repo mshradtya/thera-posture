@@ -87,17 +87,16 @@ const BackPain = () => {
 
           {/* Header Section */}
           <View style={styles.headerTextSection}>
-            <Text style={styles.title}>Back Assessment</Text>
+            <Text style={styles.title}>Posture Assessment</Text>
             <Text style={styles.subtitle}>
-              Back pain affects 80% of people at some point in their lives.
-              Understanding your pain is crucial for providing the most
-              appropriate care and recommendations.
+              Your current posture will serve as a baseline (starting point)
+              from which you will track your progress.
             </Text>
           </View>
 
           {/* Question Card */}
           <View style={styles.questionCard}>
-            <Text style={styles.question}>Do you experience back pain?</Text>
+            <Text style={styles.question}>Do you have back pain?</Text>
 
             {/* Options */}
             <View style={styles.optionsContainer}>
